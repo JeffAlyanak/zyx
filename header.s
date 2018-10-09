@@ -12,8 +12,8 @@
 
 	; The upper nible of each of these bytes selects the mapper and the lower
 	; bits do various things. In this case we're using mapper 4 (MMC3) and
-	;enabling vertical mirroring.
-	.byt %01000001
+	; enabling vertical mirroring.
+	.byt %00000001
 	.byt %00000000
 
 	; These bytes are not used for this type of header, all values must be zero.
