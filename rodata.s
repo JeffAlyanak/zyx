@@ -10,14 +10,8 @@
 
 palette_data:
 .repeat 2
-	pal $2D,    $03, $02, $07	; gray, purple, blue, red
-	pal         $03, $28, $3A	; purple, yellow, very light green
-	pal         $00, $10, $20	; grey, light grey, white
-    pal         $00, $10, $20	; grey, light grey, white
+	pal $2D,	$03, $02, $07	; gray, purple, blue, red
+	pal			$03, $28, $3A	; purple, yellow, very light green
+	pal			$00, $10, $20	; grey, light grey, white
+	pal			$00, $10, $20	; grey, light grey, white
 .endrepeat
-
-txt_data:
-	Repeat 32, .byt 1
-	.byt "  Hello World 1-1!                "
-	.byt "  Example for use with:           "
-	.byt "  jeff.alyanak.ca/docker     ", 0
