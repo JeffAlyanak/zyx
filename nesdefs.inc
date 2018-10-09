@@ -73,6 +73,16 @@ BG_ON           = %1000     ; Show background.
 SPR_OFF         = %00000    ; Hide sprites.
 SPR_ON          = %10000    ; Show sprites.
 
+; MMC3 Control addresses
+
+MMC3_BANK_SELECT	= $8000
+MMC3_BANK_VALUE		= $8001
+MMC3_MIRRORING		= $A000
+MMC3_PRG_RAM		= $A001
+MMC3_IRQ_LATCH		= $C000
+MMC3_IRQ_RELOAD		= $C001
+MMC3_IRQ_DISABLE	= $E000
+MMC3_IRQ_ENABLE		= $E001
 
 ; Be warned; both the following macros will clobber the a register.
 
@@ -96,35 +106,35 @@ SPR_ON          = %10000    ; Show sprites.
 
 ; Load a given 16-bit address into the PPU_ADDR register.
 .macro ppu_addr     Addr
-  ldx #>Addr      ; High byte first.
-  stx PPU_ADDR
-  ldx #<Addr      ; Then low byte.
-  stx PPU_ADDR
+	ldx #>Addr      ; High byte first.
+	stx PPU_ADDR
+	ldx #<Addr      ; Then low byte.
+	stx PPU_ADDR
 .endmacro
 
 ; Seek to a given X,Y address in the nametable.
 ; If the 3rd parameter is given, it is 0, 1, 2, or 3 to specify which nametable
 ; (i.e. which base address). Otherwise, 0 ($2000) is assumed.
 .macro ppu_xy   cx, cy, nt
-  .ifblank nt
-    ppu_addr ($2000+(cy*32)+cx)
-  .else
-    ppu_addr ($2000+(cy*32)+cx+(nt*$400))
-  .endif
+	.ifblank nt
+		ppu_addr ($2000+(cy*32)+cx)
+	.else
+		ppu_addr ($2000+(cy*32)+cx+(nt*$400))
+	.endif
 .endmacro
 
 ; Define a palette, as a set of 3 or 4 colour indices:
 .macro  pal bb, uu, vv, ww
-  .ifnblank ww
-    .byt bb, uu, vv, ww
-  .else
-    .byt $00, bb, uu, vv
-  .endif
+	.ifnblank ww
+		.byt bb, uu, vv, ww
+	.else
+		.byt $00, bb, uu, vv
+	.endif
 .endmacro
 
 ; Repeat code statements a constant number of times:
 .macro Repeat num, what
-  .repeat num
-    what
-  .endrepeat
+	.repeat num
+		what
+	.endrepeat
 .endmacro

@@ -1,13 +1,10 @@
 ; ---- Hardware init -----------------------------------------------------------
-; This code initializes the famicom/NES hardware.
-
+; This code initializes the famicom/NES and MMC3 hardware.
 
 
 ; ---- Main Hardware init ------------------------------------------------------
 
 ; MAIN PROGRAM START: The 'reset' address.
-
-
 
 	sei						; Disable IRQs, you don't want the init interrupted.
 	cld						; Disable binary coded decimal mode.
@@ -119,22 +116,33 @@
 	sta PPU_MASK
 	wait_for_nmi
 
-	; Sets up the bank switching to the following configuration:
-	;	2KB bank at $0000-$07FF
-	;	2KB bank at $0800-$13FF
-	LDA #%01000010
-	STA $8000
+	; MMC3 Initialization
 
-	LDA #%00000011
-	STA $8001
+	sta MMC3_IRQ_DISABLE	; Writing any value will disable MMC3 IRQ
 
-	lda #$01
-	STA $A000
-	STA $A000
-	STA $A000
-	STA $A000
-	STA $A000
+	lda #$80
+	sta MMC3_PRG_RAM		; enable PRG RAM, w+
 
+	ldy #$00
+	sty MMC3_MIRRORING		; vertical mirroring
+
+		; Initialize each PRG ROM bank and set configuration 0:
+		; $8000-$9FFF swappable, $C000-$DFFF fixed to second-last bank
+	ldx #6
+	stx MMC3_BANK_SELECT
+	sty MMC3_BANK_VALUE
+	inx
+	stx MMC3_BANK_SELECT
+	sty MMC3_BANK_VALUE
+
+		; Initial each CHR bank
+	ldx #6
+:	sty MMC3_BANK_SELECT	; select bank x
+	sty MMC3_BANK_VALUE		; map CHR bank x
+	iny
+	dex
+	bne :-
+	
 	; Some setup for the noise channel.
 	; We'll fire some one-shot sounds with this sound channel for
 	; use in debugging.
