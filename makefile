@@ -4,6 +4,9 @@ LL  	= ld65
 EMUL 	= fceux
 BIN		= zyx.nes
 
+CHREDIT	= yychr
+CHRDATA	= stuff.chr
+
 # Build the ROM and open it in the fceux emulator.
 all: $(BIN)
 	$(EMUL) $(BIN) &
@@ -26,5 +29,10 @@ zyx.nes: zyx.o
 	$(LL) $< -o $@ -C nesfile.ini
 	rm zyx.o
 
+# Edit chr data.
+chr: 
+	$(CHREDIT) $(CHRDATA) &
+
+# Delete junk.
 clean:
-	rm -f *.nes *.o
+	rm -f *.nes *.o *.nes.deb
