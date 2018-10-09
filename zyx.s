@@ -1,4 +1,4 @@
-; This example makes use of nesfile.ini (i.e. a configuration file for ld65).
+; zyx boilerplate
 
 ; ---- Includes ----------------------------------------------------------------
 
